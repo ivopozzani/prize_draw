@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :person do
-    name { 'MyString' }
-    cpf { 'MyString' }
+    name { 'LuckGuy' }
+    cpf { '999.666.999-66' }
     birth_date { '2022-03-21' }
   end
 end
