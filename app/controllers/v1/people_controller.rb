@@ -2,6 +2,12 @@
 
 module V1
   class PeopleController < ApplicationController
+    def index
+      @people = Person.all
+
+      render json: @people, status: :ok, each_serializer: V1::PersonSerializer
+    end
+
     def create
       @person = Person.create!(person_params)
 

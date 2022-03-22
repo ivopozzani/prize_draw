@@ -3,6 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe 'People', type: :request do
+  describe 'GET /people' do
+    it 'returns http status ok' do
+      get v1_people_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns all people' do
+      create(:person, cpf: '12333333')
+      create(:person, cpf: '1234444')
+      people = [{ id: 1, name: 'LuckGuy', cpf: '12333333', birth_date: '2022-03-21' },
+                { id: 2, name: 'LuckGuy', cpf: '1234444', birth_date: '2022-03-21' }]
+
+      get v1_people_path
+      expect(response.body).to eq(people.to_json)
+    end
+  end
+
   describe 'POST /people' do
     subject { post v1_people_path, params: { person: person_params } }
 
@@ -15,8 +32,10 @@ RSpec.describe 'People', type: :request do
       end
 
       it 'returns json with created person' do
+        expected = { id: 1, name: 'Lucky', cpf: '222333', birth_date: '2020-02-02' }
+
         subject
-        expect(response.body).to eq('{"id":1,"name":"Lucky","cpf":"222333","birth_date":"2020-02-02"}')
+        expect(response.body).to eq(expected.to_json)
       end
 
       it 'adds user to db' do
@@ -41,6 +60,7 @@ RSpec.describe 'People', type: :request do
           { message: "Name can't be blank" },
           { message: "Cpf can't be blank" }
         ] }
+
         subject
         expect(response.body).to eq(errors.to_json)
       end
@@ -59,8 +79,10 @@ RSpec.describe 'People', type: :request do
       end
 
       it 'returns json with updated person' do
+        expected = { id: 1, name: 'new_name', cpf: '999.666.999-66', birth_date: '2022-03-21' }
+
         subject
-        expect(response.body).to eq('{"id":1,"name":"new_name","cpf":"999.666.999-66","birth_date":"2022-03-21"}')
+        expect(response.body).to eq(expected.to_json)
       end
 
       it "changes person's attributes" do
@@ -93,6 +115,7 @@ RSpec.describe 'People', type: :request do
             { message: "Name can't be blank" },
             { message: "Cpf can't be blank" }
           ] }
+
           subject
           expect(response.body).to eq(errors.to_json)
         end
@@ -110,8 +133,10 @@ RSpec.describe 'People', type: :request do
       end
 
       it 'returns json with deleted person' do
+        expected = { id: 1, name: 'LuckGuy', cpf: '999.666.999-66', birth_date: '2022-03-21' }
+
         delete v1_person_path(person)
-        expect(response.body).to eq('{"id":1,"name":"LuckGuy","cpf":"999.666.999-66","birth_date":"2022-03-21"}')
+        expect(response.body).to eq(expected.to_json)
       end
 
       it 'removes record from db' do
