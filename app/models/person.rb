@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
 class Person < ApplicationRecord
-  validates :name, presence: true
-  validates :cpf, presence: true, uniqueness: true
+  validates :name, :cpf, presence: true
+  validates :cpf, uniqueness: true
 end
