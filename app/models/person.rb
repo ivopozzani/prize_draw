@@ -3,7 +3,7 @@
 class Person < ApplicationRecord
   validates :name, :cpf, presence: true
   validates :cpf, uniqueness: true
-  validates :drawn, inclusion: { in: [true, false] }
+  validates :drawn, :deleted, inclusion: { in: [true, false] }
 
   scope :random, -> { order(Arel.sql('RANDOM()')) }
   scope :drawn, -> { where(drawn: true) }

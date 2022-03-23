@@ -2,13 +2,7 @@
 
 module V1
   class PrizesController < ApplicationController
-    before_action :authenticate, only: :create
-
-    def index
-      @lucky_people = Person.drawn
-
-      render json: @lucky_people, status: :ok, each_serializer: V1::PrizeSerializer
-    end
+    before_action :authenticate
 
     def create
       @lucky_person = Person.random.not_drawn.not_deleted.first
