@@ -1,0 +1,3 @@
+class PrizeDrawsController < ApplicationController
+    
+end
