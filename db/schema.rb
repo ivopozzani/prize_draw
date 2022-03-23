@@ -20,5 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 20_220_323_131_641) do
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.boolean 'drawn', default: false, null: false
+    t.boolean 'deleted', default: false, null: false
+    t.date 'drawn_date'
   end
 end
