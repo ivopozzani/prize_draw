@@ -12,12 +12,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_220_321_193_852) do
+ActiveRecord::Schema[7.0].define(version: 20_220_323_131_641) do
   create_table 'people', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'cpf', null: false
     t.date 'birth_date'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.boolean 'drawn', default: false, null: false
   end
 end
