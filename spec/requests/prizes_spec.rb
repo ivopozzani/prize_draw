@@ -3,16 +3,25 @@
 require 'rails_helper'
 
 RSpec.describe 'Prizes', type: :request do
+  describe 'GET /people/prizes' do
+    it 'returns http status ok' do
+      get v1_people_prizes_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns lucky people' do
+      lucky_person = create(:person, drawn: true, drawn_date: Time.now.strftime('%F'))
+      get v1_people_prizes_path
+      expect(response.body).to include(lucky_person.name, lucky_person.cpf, lucky_person.drawn_date.to_s)
+    end
+  end
+
   describe 'POST /people/prizes' do
     let(:headers) { { Authorization: 'Bearer prize_draw_authorization' } }
-<<<<<<< HEAD
 
     context 'when request is successful' do
-=======
-    describe 'status ok' do
->>>>>>> feat:updated tests
       it 'returns http status ok' do
-        person = create(:person)
+        create(:person)
 
         post v1_people_prizes_path, headers: headers
         expect(response).to have_http_status(:ok)
