@@ -10,9 +10,18 @@ RSpec.describe 'Prizes', type: :request do
     end
 
     it 'returns lucky people' do
-      lucky_person = create(:person, drawn: true, drawn_date: Time.now.strftime('%F'))
+      lucky_people = [
+        { name: 'LuckGuy1', cpf: '999.666.999-66', drawn_at: Time.now },
+        { name: 'LuckGuy2', cpf: '99.666.999-66', drawn_at: Time.now },
+        { name: 'LuckGuy3', cpf: '9.666.999-66', drawn_at: Time.now }
+      ]
+
+      lucky_people.each do |lp|
+        create(:person, name: lp[:name], cpf: lp[:cpf], drawn_at: lp[:drawn_at])
+      end
+
       get v1_people_prizes_path
-      expect(response.body).to include(lucky_person.name, lucky_person.cpf, lucky_person.drawn_date.to_s)
+      expect(response.body).to include('LuckGuy1', 'LuckGuy2', 'LuckGuy3')
     end
   end
 
