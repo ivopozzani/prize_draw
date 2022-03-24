@@ -11,4 +11,26 @@ RSpec.describe Person, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:cpf).case_insensitive }
   end
+
+  describe 'scopes' do
+    let!(:person) { create(:person) }
+
+    describe '.random' do
+      subject { described_class.random }
+
+      it { is_expected.to include(person) }
+    end
+
+    describe '.drawn' do
+      subject { described_class.drawn }
+
+      it { is_expected.not_to include(person) }
+    end
+
+    describe '.not_drawn' do
+      subject { described_class.not_drawn }
+
+      it { is_expected.to include(person) }
+    end
+  end
 end

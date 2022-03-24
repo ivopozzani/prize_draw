@@ -167,9 +167,10 @@ RSpec.describe 'People', type: :request do
         expect(response.body).to eq(expected.to_json)
       end
 
-      it 'removes record from db' do
+      it 'changes discarded_at parameter to not nil' do
         delete v1_person_path(person.id)
-        expect(Person.where(id: person.id)).to be_blank
+        person.reload
+        expect(person.discarded_at).not_to be nil
       end
     end
 
