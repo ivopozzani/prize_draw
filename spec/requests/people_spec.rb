@@ -168,8 +168,10 @@ RSpec.describe 'People', type: :request do
       end
 
       it 'removes record from db' do
-        delete v1_person_path(person.id)
-        expect(Person.where(id: person.id)).to be_blank
+        expect do
+          delete v1_person_path(person.id)
+          person.reload
+        end.to change(person, :deleted).from(false).to(true)
       end
     end
 
