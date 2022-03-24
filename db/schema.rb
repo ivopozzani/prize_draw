@@ -12,15 +12,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_220_323_131_641) do
+ActiveRecord::Schema[7.0].define(version: 20_220_324_183_212) do
   create_table 'people', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'cpf', null: false
     t.date 'birth_date'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.boolean 'drawn', default: false, null: false
-    t.boolean 'deleted', default: false, null: false
-    t.date 'drawn_date'
+    t.datetime 'drawn_at'
+    t.datetime 'discarded_at'
+    t.index ['discarded_at'], name: 'index_people_on_discarded_at'
   end
 end
