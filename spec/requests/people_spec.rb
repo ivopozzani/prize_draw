@@ -167,7 +167,7 @@ RSpec.describe 'People', type: :request do
         expect(response.body).to eq(expected.to_json)
       end
 
-      it 'removes record from db' do
+      it 'changes record parameter to deleted: true' do
         expect do
           delete v1_person_path(person.id)
           person.reload
