@@ -5,8 +5,12 @@ require 'rails_helper'
 RSpec.describe 'Prizes', type: :request do
   describe 'POST /people/prizes' do
     let(:headers) { { Authorization: 'Bearer prize_draw_authorization' } }
+<<<<<<< HEAD
 
     context 'when request is successful' do
+=======
+    describe 'status ok' do
+>>>>>>> feat:updated tests
       it 'returns http status ok' do
         person = create(:person)
 
