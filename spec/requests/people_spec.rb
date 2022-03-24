@@ -168,10 +168,9 @@ RSpec.describe 'People', type: :request do
       end
 
       it 'changes record parameter to deleted: true' do
-        expect do
-          delete v1_person_path(person.id)
-          person.reload
-        end.to change(person, :deleted).from(false).to(true)
+        delete v1_person_path(person.id)
+        person.reload
+        expect(person.discarded_at).not_to be nil
       end
     end
 

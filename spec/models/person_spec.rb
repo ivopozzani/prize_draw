@@ -9,9 +9,6 @@ RSpec.describe Person, type: :model do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:cpf) }
 
-    it { is_expected.to validate_inclusion_of(:drawn).in_array([true, false]) }
-    it { is_expected.to validate_inclusion_of(:deleted).in_array([true, false]) }
-
     it { is_expected.to validate_uniqueness_of(:cpf).case_insensitive }
   end
 
@@ -32,12 +29,6 @@ RSpec.describe Person, type: :model do
 
     describe '.not_drawn' do
       subject { described_class.not_drawn }
-
-      it { is_expected.to include(person) }
-    end
-
-    describe '.not_deleted' do
-      subject { described_class.not_deleted }
 
       it { is_expected.to include(person) }
     end
