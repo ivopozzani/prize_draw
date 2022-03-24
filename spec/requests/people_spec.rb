@@ -69,9 +69,13 @@ RSpec.describe 'People', type: :request do
 
   describe 'PATCH /people/:id' do
     context 'When valid' do
-      let(:person_params) { { name: 'new_name' } }
+      let(:person_params) { { name: 'new_name', cpf: '00011122', birth_date: '2020-02-02' } }
       let(:person) { create(:person) }
-      subject { patch v1_person_path(person), params: { person: person_params } }
+
+      subject do
+        patch v1_person_path(person.id), params: { person: person_params }
+        person.reload
+      end
 
       it 'returns http status ok' do
         subject
@@ -79,31 +83,55 @@ RSpec.describe 'People', type: :request do
       end
 
       it 'returns json with updated person' do
-        expected = { id: 1, name: 'new_name', cpf: '999.666.999-66', birth_date: '2022-03-21' }
+        expected = { id: 1, name: 'new_name', cpf: '00011122', birth_date: '2020-02-02' }
 
         subject
         expect(response.body).to eq(expected.to_json)
       end
 
-      it "changes person's attributes" do
-        subject
-        person.reload
-        expect(person.name).to eq('new_name')
+      it "changes person's name attribute" do
+        expect { subject }.to change(person, :name).from('LuckGuy').to('new_name')
+      end
+
+      it "changes person's cpf attribute" do
+        expect { subject }.to change(person, :cpf).from('999.666.999-66').to('00011122')
+      end
+
+      it "changes person's birth_date attribute" do
+        expect { subject }.to change(person, :birth_date).from(Date.parse('2022-03-21')).to(Date.parse('2020-02-02'))
       end
     end
 
     context 'When not valid' do
       describe 'invalid id' do
+        let(:person_params) { { name: 'new_name', cpf: '00011122', birth_date: '2020-02-02' } }
+        let(:person) { create(:person) }
+
         it 'returns http status not_found' do
-          patch v1_person_path('invalid')
+          person
+          patch v1_person_path('invalid'), params: { person: person_params }
           expect(response).to have_http_status(:not_found)
+        end
+
+        it 'does not change db data' do
+          person
+          expect do
+            patch v1_person_path('invalid'), params: { person: person_params }
+            person.reload
+          end.not_to change { person }
+        end
+
+        it 'returns error message' do
+          person
+          patch v1_person_path('invalid'), params: { person: person_params }
+          expect(response.body).to eq({ errors: [{ message: "Couldn't find Person with 'id'=invalid" }] }.to_json)
         end
       end
 
       describe 'invalid params' do
-        let(:person_params) { { name: '', cpf: '', birth_date: '' } }
+        let(:person_invalid_params) { { name: '', cpf: '', birth_date: '' } }
         let(:person) { create(:person) }
-        subject { patch v1_person_path(person), params: { person: person_params } }
+        subject { patch v1_person_path(person), params: { person: person_invalid_params } }
 
         it 'returns http status unprocessable_entity' do
           subject
@@ -135,13 +163,13 @@ RSpec.describe 'People', type: :request do
       it 'returns json with deleted person' do
         expected = { id: 1, name: 'LuckGuy', cpf: '999.666.999-66', birth_date: '2022-03-21' }
 
-        delete v1_person_path(person)
+        delete v1_person_path(person.id)
         expect(response.body).to eq(expected.to_json)
       end
 
       it 'removes record from db' do
-        person
-        expect { delete v1_person_path(person) }.to change(Person, :count).by(-1)
+        delete v1_person_path(person.id)
+        expect(Person.where(id: person.id)).to be_blank
       end
     end
 
