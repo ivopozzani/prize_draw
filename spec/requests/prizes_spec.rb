@@ -3,12 +3,34 @@
 require 'rails_helper'
 
 RSpec.describe 'Prizes', type: :request do
+  describe 'GET /people/prizes' do
+    it 'returns http status ok' do
+      get v1_people_prizes_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns lucky people' do
+      lucky_people = [
+        { name: 'LuckGuy1', cpf: '999.666.999-66', drawn_at: Time.now },
+        { name: 'LuckGuy2', cpf: '99.666.999-66', drawn_at: Time.now },
+        { name: 'LuckGuy3', cpf: '9.666.999-66', drawn_at: Time.now }
+      ]
+
+      lucky_people.each do |lp|
+        create(:person, name: lp[:name], cpf: lp[:cpf], drawn_at: lp[:drawn_at])
+      end
+
+      get v1_people_prizes_path
+      expect(response.body).to include('LuckGuy1', 'LuckGuy2', 'LuckGuy3')
+    end
+  end
+
   describe 'POST /people/prizes' do
     let(:headers) { { Authorization: 'Bearer prize_draw_authorization' } }
 
     context 'when request is successful' do
       it 'returns http status ok' do
-        person = create(:person)
+        create(:person)
 
         post v1_people_prizes_path, headers: headers
         expect(response).to have_http_status(:ok)
