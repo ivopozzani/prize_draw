@@ -3,7 +3,7 @@
 module V1
   class PeopleController < ApplicationController
     def index
-      @people = Person.not_deleted
+      @people = Person.kept
 
       render json: @people, status: :ok, each_serializer: V1::PersonSerializer
     end
@@ -23,7 +23,7 @@ module V1
 
     def destroy
       @person = Person.find(params[:id])
-      @person.update_column :deleted, true
+      @person.discard!
 
       render json: @person, status: :ok, serializer: V1::PersonSerializer
     end
