@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Prizes', type: :request do
+RSpec.describe V1::PrizesController, type: :request do
   describe 'GET /people/prizes' do
     it 'returns http status ok' do
       get v1_people_prizes_path
