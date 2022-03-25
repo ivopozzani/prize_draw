@@ -7,6 +7,7 @@ module ErrorHandler
     rescue_from ActiveRecord::RecordNotFound, with: :not_found
     rescue_from ActiveRecord::RecordInvalid, with: :invalid
     rescue_from RuntimeError, with: :unprocessable_entity
+    rescue_from ActionController::ParameterMissing, with: :unprocessable_entity
   end
 
   private
