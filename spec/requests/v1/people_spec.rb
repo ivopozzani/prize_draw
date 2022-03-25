@@ -58,6 +58,26 @@ RSpec.describe 'v1/people', type: :request do
         end
         run_test!
       end
+
+      response(422, 'unprocessable entity') do
+        examples 'application/json' => {
+          errors: [{
+            message: "Name can't be blank"
+          },
+                   {
+                     message: "Cpf can't be blank"
+                   }]
+        }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
     end
   end
 
@@ -81,6 +101,45 @@ RSpec.describe 'v1/people', type: :request do
 
         examples 'application/json' => {
           name: 'Maria Candida'
+        }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response(404, 'not found') do
+        examples 'application/json' => {
+          errors: [
+            {
+              message: "Couldn't find Person with 'id'=123"
+            }
+          ]
+        }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        examples 'application/json' => {
+          errors: [{
+            message: "Name can't be blank"
+          },
+                   {
+                     message: "Cpf can't be blank"
+                   }]
         }
 
         after do |example|
@@ -123,11 +182,69 @@ RSpec.describe 'v1/people', type: :request do
         end
         run_test!
       end
+
+      response(404, 'not found') do
+        examples 'application/json' => {
+          errors: [
+            {
+              message: "Couldn't find Person with 'id'=123"
+            }
+          ]
+        }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        examples 'application/json' => {
+          errors: [{
+            message: "Name can't be blank"
+          },
+                   {
+                     message: "Cpf can't be blank"
+                   }]
+        }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
     end
 
     delete('delete person') do
       response(200, 'successful') do
         let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response(404, 'not found') do
+        examples 'application/json' => {
+          errors: [
+            {
+              message: "Couldn't find Person with 'id'=123"
+            }
+          ]
+        }
 
         after do |example|
           example.metadata[:response][:content] = {

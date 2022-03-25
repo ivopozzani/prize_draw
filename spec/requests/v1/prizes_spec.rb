@@ -46,6 +46,38 @@ RSpec.describe 'v1/prizes', type: :request do
         end
         run_test!
       end
+
+      response(401, 'unauthorized') do
+        examples 'application/json' => 'HTTP Token: Access denied.'
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response(422, 'unprocessable entity') do
+        examples 'application/json' => {
+          errors: [
+            {
+              message: "There's no elegible person for this prize drawn"
+            }
+          ]
+        }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
     end
   end
 end

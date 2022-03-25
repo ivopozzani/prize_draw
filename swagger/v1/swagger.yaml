@@ -33,6 +33,14 @@ paths:
                 name: Richard Wilson
                 cpf: 333.333.888-99
                 birth_date: '2021-03-22'
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Name can't be blank
+                - message: Cpf can't be blank
       requestBody:
         content:
           application/json:
@@ -66,6 +74,21 @@ paths:
             application/json:
               example:
                 name: Maria Candida
+        '404':
+          description: not found
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Couldn't find Person with 'id'=123
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Name can't be blank
+                - message: Cpf can't be blank
       requestBody:
         content:
           application/json:
@@ -90,6 +113,21 @@ paths:
                 name: Richard Wilson
                 cpf: 333.333.888-99
                 birth_date: '2021-03-22'
+        '404':
+          description: not found
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Couldn't find Person with 'id'=123
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Name can't be blank
+                - message: Cpf can't be blank
       requestBody:
         content:
           application/json:
@@ -107,6 +145,13 @@ paths:
       responses:
         '200':
           description: successful
+        '404':
+          description: not found
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Couldn't find Person with 'id'=123
   "/v1/people/prizes":
     get:
       summary: list prizes
@@ -138,6 +183,18 @@ paths:
                 name: Richard Wilson
                 cpf: 333.333.888-99
                 drawn_at: '2022-03-24T19:45:00.950Z'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              example: 'HTTP Token: Access denied.'
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: There's no elegible person for this prize drawn
 servers:
 - url: http://localhost:3000
   variables:
