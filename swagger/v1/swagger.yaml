@@ -1,0 +1,202 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/v1/people":
+    get:
+      summary: list people
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              example:
+              - id: 1
+                name: Richard Wilson
+                cpf: 333.333.888-99
+                birth_date: '2021-03-22'
+              - id: 2
+                name: Maria Candida
+                cpf: 222.333.222-99
+                birth_date: '2022-03-22'
+    post:
+      summary: create person
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              example:
+                name: Richard Wilson
+                cpf: 333.333.888-99
+                birth_date: '2021-03-22'
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Name can't be blank
+                - message: Cpf can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                cpf:
+                  type: string
+                birth_date:
+                  type: string
+              required:
+              - name
+              - cpf
+  "/v1/people/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    patch:
+      summary: update person
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              example:
+                name: Maria Candida
+        '404':
+          description: not found
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Couldn't find Person with 'id'=123
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Name can't be blank
+                - message: Cpf can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                cpf:
+                  type: string
+                birth_date:
+                  type: string
+    put:
+      summary: update person
+      parameters: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              example:
+                name: Richard Wilson
+                cpf: 333.333.888-99
+                birth_date: '2021-03-22'
+        '404':
+          description: not found
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Couldn't find Person with 'id'=123
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Name can't be blank
+                - message: Cpf can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                cpf:
+                  type: string
+                birth_date:
+                  type: string
+    delete:
+      summary: delete person
+      responses:
+        '200':
+          description: successful
+        '404':
+          description: not found
+          content:
+            application/json:
+              example:
+                errors:
+                - message: Couldn't find Person with 'id'=123
+  "/v1/people/prizes":
+    get:
+      summary: list prizes
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              example:
+              - name: Richard Wilson
+                cpf: 333.333.888-99
+                drawn_at: '2022-03-24T19:45:00.950Z'
+              - name: Maria Candida
+                cpf: 222.333.222-99
+                drawn_at: '2022-03-24T18:56:00.950Z'
+    post:
+      summary: create prize
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              example:
+                name: Richard Wilson
+                cpf: 333.333.888-99
+                drawn_at: '2022-03-24T19:45:00.950Z'
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              example: 'HTTP Token: Access denied.'
+        '422':
+          description: unprocessable entity
+          content:
+            application/json:
+              example:
+                errors:
+                - message: There's no elegible person for this prize drawn
+servers:
+- url: http://localhost:3000
+  variables:
+    defaultHost:
+      default: localhost

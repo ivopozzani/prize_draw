@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'People', type: :request do
+RSpec.describe V1::PeopleController, type: :request do
   describe 'GET /people' do
     it 'returns http status ok' do
       get v1_people_path
